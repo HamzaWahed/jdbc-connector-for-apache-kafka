@@ -164,7 +164,7 @@ public class JdbcSourceTask extends SourceTask {
             switch (queryMode) {
                 case TABLE:
                     if (validateNonNulls) {
-                        validateNonNullable(
+                        checkIfNull(
                             mode,
                             tableOrQuery,
                             incrementingColumn,
@@ -377,7 +377,7 @@ public class JdbcSourceTask extends SourceTask {
         tableQueue.add(expectedHead);
     }
 
-    private void validateNonNullable(
+    private void checkIfNull(
         final String incrementalMode,
         final String table,
         final String incrementingColumn,
