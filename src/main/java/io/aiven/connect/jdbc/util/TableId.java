@@ -90,23 +90,21 @@ public class TableId implements Comparable<TableId>, ExpressionBuilder.Expressab
         if (that == this) {
             return 0;
         }
+
         int diff = this.tableName.compareTo(that.tableName);
         if (diff != 0) {
             return diff;
         }
-        if (this.schemaName == null) {
-            if (that.schemaName != null) {
-                return -1;
-            }
-        } else {
-            if (that.schemaName == null) {
-                return 1;
-            }
-            diff = this.schemaName.compareTo(that.schemaName);
-            if (diff != 0) {
-                return diff;
-            }
+
+       diff = this.compareToCheckSchema(that);
+        if (diff != 0) {
+            return diff;
         }
+
+        return this.compareToCatalogName(that);
+    }
+
+    public int compareToCatalogName(final TableId that) {
         if (this.catalogName == null) {
             if (that.catalogName != null) {
                 return -1;
@@ -115,11 +113,26 @@ public class TableId implements Comparable<TableId>, ExpressionBuilder.Expressab
             if (that.catalogName == null) {
                 return 1;
             }
-            diff = this.catalogName.compareTo(that.catalogName);
-            if (diff != 0) {
-                return diff;
-            }
+            int diff = this.catalogName.compareTo(that.catalogName);
+            return diff;
         }
+        return 0;
+
+    }
+
+    public int compareToCheckSchema(final TableId that) {
+        if (this.schemaName == null) {
+            if (that.schemaName != null) {
+                return -1;
+            }
+        } else {
+            if (that.schemaName == null) {
+                return 1;
+            }
+            int diff = this.schemaName.compareTo(that.schemaName);
+            return diff;
+        }
+
         return 0;
     }
 
