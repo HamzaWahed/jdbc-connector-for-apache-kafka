@@ -266,14 +266,15 @@ public class GenericDatabaseDialect implements DatabaseDialect {
 
     protected JdbcDriverInfo createJdbcDriverInfo(final Connection connection) throws SQLException {
         final DatabaseMetaData metadata = connection.getMetaData();
-        return new JdbcDriverInfo(
-            metadata.getJDBCMajorVersion(),
-            metadata.getJDBCMinorVersion(),
-            metadata.getDriverName(),
-            metadata.getDatabaseProductName(),
-            metadata.getDatabaseProductVersion()
-        );
-    }
+        return new JdbcDriverInfo
+                .Builder()
+                .jdbcMajorVersion(metadata.getJDBCMajorVersion())
+                .jdbcMinorVersion(metadata.getJDBCMinorVersion())
+                .jdbcDriverName(metadata.getDriverName())
+                .productName(metadata.getDatabaseProductName())
+                .productVersion(metadata.getDatabaseProductVersion())
+                .build();
+   }
 
     /**
      * Add or modify any connection properties based upon the {@link #config configuration}.

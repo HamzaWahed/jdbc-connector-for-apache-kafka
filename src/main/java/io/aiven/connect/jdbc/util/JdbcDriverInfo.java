@@ -29,26 +29,94 @@ public class JdbcDriverInfo {
     private final String productVersion;
 
     /**
-     * Create the driver information.
+     * Creates the driver information.
      *
-     * @param jdbcMajorVersion the major version of the JDBC specification supported by the driver
-     * @param jdbcMinorVersion the minor version of the JDBC specification supported by the driver
-     * @param jdbcDriverName   the name of the JDBC driver
-     * @param productName      the name of the database product
-     * @param productVersion   the version of the database product
+     * @param builder the JDBC builder object
      */
-    public JdbcDriverInfo(
-        final int jdbcMajorVersion,
-        final int jdbcMinorVersion,
-        final String jdbcDriverName,
-        final String productName,
-        final String productVersion
-    ) {
-        this.jdbcMajorVersion = jdbcMajorVersion;
-        this.jdbcMinorVersion = jdbcMinorVersion;
-        this.jdbcDriverName = jdbcDriverName;
-        this.productName = productName;
-        this.productVersion = productVersion;
+    public JdbcDriverInfo(Builder builder) {
+        this.jdbcMajorVersion = builder.jdbcMajorVersion;
+        this.jdbcMinorVersion = builder.jdbcMinorVersion;
+        this.jdbcDriverName = builder.jdbcDriverName;
+        this.productName = builder.productName;
+        this.productVersion = builder.productVersion;
+    }
+
+    public static class Builder {
+        private int jdbcMajorVersion;
+        private int jdbcMinorVersion;
+        private String jdbcDriverName;
+        private String productName;
+        private String productVersion;
+
+        public Builder jdbcMajorVersion(int jdbcMajorVersion) {
+            this.jdbcMajorVersion = jdbcMajorVersion;
+            return this;
+        }
+
+        public Builder jdbcMinorVersion(int jdbcMinorVersion) {
+            this.jdbcMinorVersion = jdbcMinorVersion;
+            return this;
+        }
+
+        public Builder jdbcDriverName(String jdbcDriverName) {
+            this.jdbcDriverName = jdbcDriverName;
+            return this;
+        }
+
+        public Builder productName(String productName) {
+            this.productName = productName;
+            return this;
+        }
+
+        public Builder productVersion(String productVersion) {
+            this.productVersion = productVersion;
+            return this;
+        }
+
+        public int getJdbcMajorVersion() {
+            return jdbcMajorVersion;
+        }
+
+        public void setJdbcMajorVersion(int jdbcMajorVersion) {
+            this.jdbcMajorVersion = jdbcMajorVersion;
+        }
+
+        public int getJdbcMinorVersion() {
+            return jdbcMinorVersion;
+        }
+
+        public void setJdbcMinorVersion(int jdbcMinorVersion) {
+            this.jdbcMinorVersion = jdbcMinorVersion;
+        }
+
+        public String getJdbcDriverName() {
+            return jdbcDriverName;
+        }
+
+        public void setJdbcDriverName(String jdbcDriverName) {
+            this.jdbcDriverName = jdbcDriverName;
+        }
+
+        public String getProductName() {
+            return productName;
+        }
+
+        public void setProductName(String productName) {
+            this.productName = productName;
+        }
+
+        public String getProductVersion() {
+            return productVersion;
+        }
+
+        public void setProductVersion(String productVersion) {
+            this.productVersion = productVersion;
+        }
+
+        public JdbcDriverInfo build() {
+            return new JdbcDriverInfo(this);
+        }
+
     }
 
     /**
