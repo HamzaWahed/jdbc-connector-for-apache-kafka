@@ -18,6 +18,7 @@
 package io.aiven.connect.jdbc.sink;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashMap;
@@ -50,6 +51,18 @@ public class SqliteHelperTest {
         sqliteHelper.tearDown();
     }
 
+    public void createTableHelper(String query) throws SQLException {
+        sqliteHelper.createTable(query);
+    }
+
+    public String getSqlLiteUri() {
+        return sqliteHelper.sqliteUri();
+    }
+
+    public Connection getSqlLiteConnectionString() {
+        return sqliteHelper.connection;
+    }
+
     @Test
     public void returnTheDatabaseTableInformation() throws SQLException {
         final String createEmployees = "CREATE TABLE employees\n"
@@ -67,18 +80,21 @@ public class SqliteHelperTest {
 
         final String createNonPkTable = "CREATE TABLE nonPk (id numeric, response text)";
 
-        sqliteHelper.createTable(createEmployees);
-        sqliteHelper.createTable(createProducts);
-        sqliteHelper.createTable(createNonPkTable);
+//        sqliteHelper.createTable(createEmployees);
+//        sqliteHelper.createTable(createProducts);
+//        sqliteHelper.createTable(createNonPkTable);
+        createTableHelper(createEmployees);
+        createTableHelper(createProducts);
+        createTableHelper(createNonPkTable);
 
         final Map<String, String> connProps = new HashMap<>();
-        connProps.put(JdbcConfig.CONNECTION_URL_CONFIG, sqliteHelper.sqliteUri());
+        connProps.put(JdbcConfig.CONNECTION_URL_CONFIG, getSqlLiteUri());
         final JdbcSinkConfig config = new JdbcSinkConfig(connProps);
         final DatabaseDialect dialect = new SqliteDatabaseDialect(config);
 
         final Map<String, TableDefinition> tables = new HashMap<>();
-        for (final TableId tableId : dialect.tableIds(sqliteHelper.connection)) {
-            tables.put(tableId.tableName(), dialect.describeTable(sqliteHelper.connection, tableId));
+        for (final TableId tableId : dialect.tableIds(getSqlLiteConnectionString())) {
+            tables.put(tableId.tableName(), dialect.describeTable(getSqlLiteConnectionString(), tableId));
         }
 
         assertThat(tables).containsOnlyKeys("employees", "products", "nonPk");
